@@ -26,4 +26,9 @@ export class ProductService {
     else
     return of(this.products);
    }
+
+   public deleteProduct(id: number): Observable<Boolean>{
+    this.products.filter(p=>p.id!=id)!;
+    return of(true);
+   } 
 }

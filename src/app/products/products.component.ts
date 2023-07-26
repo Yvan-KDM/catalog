@@ -15,6 +15,10 @@ export class ProductsComponent implements OnInit {
   constructor(private productService: ProductService){}
 
   ngOnInit(): void {
+    this.handleGetAllProducts();
+  }
+
+  handleGetAllProducts(){
     this.productService.getAllProduct()
     .subscribe({
         next: (data)=>{
@@ -27,8 +31,14 @@ export class ProductsComponent implements OnInit {
     )
   }
 
-  handleDeleteProduct(product:any){
-    let index = this.products.indexOf(product);
-    this.products.splice(index,1)
+  handleDeleteProduct(p:Product){
+    let conf = confirm("Are you sure");
+    if (conf == false) return;
+    this.productService.deleteProduct(p.id).subscribe({
+      next: (data)=>{
+        let index = this.products.indexOf(p);
+        this.products.splice(index,1);
+      }
+    })
   }
 }
