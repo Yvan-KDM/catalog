@@ -21,6 +21,15 @@
                         <td>{{p.name}}</td>
                         <td>{{p.price}}</td>
                         <td>
+                            <i *ngIf="p.promotion==true" class="bi bi-gift-fill text-success"></i>
+                        </td>
+                        <td>
+                            <button (click)="handleStePromotion(p)" [ngClass]="p.promotion==true?'btn-danger':'btn-success'" class="btn">
+                               <span *ngIf="p.promotion==true">Disable promo</span>
+                               <span *ngIf="p.promotion==false" >Activate promo</span>
+                            </button>
+                        </td>
+                        <td>
                             <button (click)="handleDeleteProduct(p)" class="btn danger-button">
                                 <i class="bi bi-trash"></i>
                             </button>

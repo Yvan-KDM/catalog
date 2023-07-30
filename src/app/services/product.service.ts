@@ -14,9 +14,9 @@ export class ProductService {
   constructor() {
     this.products = [
       
-      {id:1, name: "Computer", price: 6500},
-      {id:2, name: "Printer", price: 1200},
-      {id:3, name: "Smart phone", price: 1400}
+      {id:1, name: "Computer", price: 6500, promotion: true},
+      {id:2, name: "Printer", price: 1200, promotion: false},
+      {id:3, name: "Smart phone", price: 1400, promotion: true}
     ];
    }
 
@@ -27,8 +27,18 @@ export class ProductService {
     return of(this.products);
    }
 
-   public deleteProduct(id: number): Observable<Boolean>{
+   public deleteProduct(id: number): Observable<boolean>{
     this.products.filter(p=>p.id!=id)!;
     return of(true);
+   } 
+
+   public setPromotion(id: number): Observable<boolean>{
+    let currentProduct = this.products.find(p=>p.id == id);
+    if(currentProduct != undefined){
+      currentProduct.promotion =! currentProduct.promotion;
+      return of(true);
+    } else {
+     return throwError(()=> new Error("Product not found"))
+    }  
    } 
 }
