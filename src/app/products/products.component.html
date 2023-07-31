@@ -7,6 +7,17 @@
     <div *ngIf="products; else errors" class="card">
         <div class="card-header text-center">Products List</div>
         <div class="card-body">
+
+            <form>
+            <div class="input-group">
+                <label class="input-group-text">Keyword: </label>
+                <input type="text" class="form-control">
+                <button class="btn btn-info">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            </form>
+
             <table class="table">
                 <thead>
                     <tr class="header">
