@@ -24,7 +24,7 @@ export class ProductService {
     let rnd = Math.random();
     if(rnd<0.1) return throwError(()=> new Error("Internet connexion error Test"))
     else
-    return of(this.products);
+    return of([...this.products]);
    }
 
    public deleteProduct(id: number): Observable<boolean>{
