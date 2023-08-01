@@ -9,8 +9,8 @@ import { Product } from '../model/product.model';
 })
 export class ProductService {
 
-  private products! : Product[];
-
+  private products! : Product[]; 
+ 
   constructor() {
     this.products = [
       
@@ -41,4 +41,10 @@ export class ProductService {
      return throwError(()=> new Error("Product not found"))
     }  
    } 
+
+   public searchProducts(keyword: string): Observable<Product[]> {
+
+    let products = this.products.filter(p=>p.name.includes(keyword));
+    return of(products);
+   }
 }
