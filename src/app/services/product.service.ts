@@ -1,8 +1,8 @@
 import { ArrayType } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import {Observable, of, throwError} from 'rxjs';
-import { Product } from '../model/product.model';
-
+import { PageProduct, Product } from '../model/product.model';
+import { UUID } from 'angular2-uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,16 @@ export class ProductService {
   constructor() {
     this.products = [
       
-      {id:1, name: "Computer", price: 6500, promotion: true},
-      {id:2, name: "Printer", price: 1200, promotion: false},
-      {id:3, name: "Smart phone", price: 1400, promotion: true}
+      {id:UUID.UUID(), name: "Computer", price: 6500, promotion: true},
+      {id:UUID.UUID(), name: "Printer", price: 1200, promotion: false},
+      {id:UUID.UUID(), name: "Smart phone", price: 1400, promotion: true}
     ];
+
+    for (let i = 0; i < 10 ; i++) {
+      this.products.push({id:UUID.UUID(), name: "Computer", price: 6500, promotion: true});
+      this.products.push({id:UUID.UUID(), name: "Printer", price: 1200, promotion: false});
+      this.products.push({id:UUID.UUID(), name: "Smart phone", price: 1400, promotion: true});
+    }
    }
 
    public getAllProduct(): Observable<Product[]> {
@@ -27,12 +33,24 @@ export class ProductService {
     return of([...this.products]);
    }
 
-   public deleteProduct(id: number): Observable<boolean>{
+   public getPageProduct(page: number, size: number): Observable<PageProduct> {
+    let index = page*size;
+    /* "~~" est utilisé pour la division entière */
+    let totalPages = ~~(this.products.length/size);
+    if(this.products.length % size != 0 )
+    totalPages ++; 
+
+    let pageProducts = this.products.slice(index, index + size);
+
+    return of({page: page, size: size, totalPages: totalPages,  products: pageProducts});
+   }
+
+   public deleteProduct(id: string): Observable<boolean>{
     this.products.filter(p=>p.id!=id)!;
     return of(true);
    } 
 
-   public setPromotion(id: number): Observable<boolean>{
+   public setPromotion(id: string): Observable<boolean>{
     let currentProduct = this.products.find(p=>p.id == id);
     if(currentProduct != undefined){
       currentProduct.promotion =! currentProduct.promotion;

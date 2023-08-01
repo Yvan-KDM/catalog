@@ -13,6 +13,9 @@ export class ProductsComponent implements OnInit {
    products! : Product[];
    errorMessage!: string;
    searchFormGroup!: FormGroup;
+   currentPage: number = 0;
+   pageSize: number = 5;
+   totalPages: number = 0;
 
    
   constructor(private productService: ProductService, private fb : FormBuilder){}
@@ -21,7 +24,7 @@ export class ProductsComponent implements OnInit {
     this.searchFormGroup = this.fb.group({
       keyword: this.fb.control(null)
     })
-    this.handleGetAllProducts();
+    this.handleGetPageProducts();
   }
 
   handleGetAllProducts(){
@@ -29,6 +32,25 @@ export class ProductsComponent implements OnInit {
     .subscribe({
         next: (data)=>{
           this.products = data;
+        },
+        error: (err)=>{
+         this.errorMessage = err;
+        }
+      }
+    )
+  }
+
+  goToPage(indexPage: number){
+    this.currentPage = indexPage;
+    this.handleGetPageProducts();
+  }
+
+  handleGetPageProducts(){
+    this.productService.getPageProduct(this.currentPage, this.pageSize)
+    .subscribe({
+        next: (data)=>{
+          this.products = data.products,
+          this.totalPages = data.totalPages;
         },
         error: (err)=>{
          this.errorMessage = err;
@@ -68,4 +90,6 @@ export class ProductsComponent implements OnInit {
       }
     })
   }
+
+
 }
